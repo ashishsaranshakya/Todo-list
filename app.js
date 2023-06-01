@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-ashish:hotel9ervictor@web-test-projects.bwuoqdk.mongodb.net/?retryWrites=true&w=majority/todolistDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-ashish:hotel9ervictor@web-test-projects.bwuoqdk.mongodb.net/?retryWrites=true&w=majority/todolistDB", {useNewUrlParser: true, useUnifiedTopology: true});
 
 const itemsSchema = {
   name: String
@@ -119,11 +119,17 @@ app.post("/delete", function(req, res){
         console.log("Successfully deleted checked item.");
         res.redirect("/");
       }
+      else {
+      	console.log(err);
+      }
     });
   } else {
     List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err, foundList){
       if (!err){
         res.redirect("/" + listName);
+      }
+      else {
+      	console.log(err);
       }
     });
   }
